@@ -21,3 +21,9 @@ out
 /setflow-preview.png
 /setflow-colors.png
 /setflow-vivid.png
+
+# Comptes, sessions et bibliothèques privées du serveur
+/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
