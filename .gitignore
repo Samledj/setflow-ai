@@ -1,0 +1,23 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+.DS_Store
+
+# Données et réglages privés
+.env
+.env.*
+!.env.example
+*.xml
+*.mp3
+*.wav
+*.aiff
+*.aif
+*.flac
+*.m4a
+*.log
+
+# Captures locales de vérification
+/setflow-preview.png
+/setflow-colors.png
+/setflow-vivid.png

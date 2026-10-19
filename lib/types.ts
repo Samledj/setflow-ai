@@ -1,0 +1,5 @@
+export type Track = { id: string; title: string; artist: string; bpm: number | null; key: string; camelot: string | null; genre: string; duration: number | null; rating: number | null; playlists: string[]; location: string; energy: number | null; demo: boolean };
+export type Profile = 'Progressive' | 'Slow Build' | 'High Energy' | 'Wave' | 'Sunset' | 'Constant Energy' | 'Peak Time' | 'Custom';
+export type Settings = { name: string; event: string; minutes: number; genres: string[]; mood: string; profile: Profile; age: string; audience: number; preferences: string; description: string; custom: number[]; boostAfter: number | null; chillStart: boolean; powerfulEnd: boolean };
+export type DJSet = { id: string; name: string; created: string; updated: string; settings: Settings; tracks: Track[]; locked: string[]; warnings: string[] };
+export const defaults: Settings = { name: 'Sunset into the night', event: 'Beach Club', minutes: 120, genres: ['Afro House', 'Deep House'], mood: 'Sunset', profile: 'Progressive', age: '25–40', audience: 150, preferences: '', description: '', custom: [3,4,6,8,9], boostAfter: null, chillStart: false, powerfulEnd: false };
