@@ -84,9 +84,14 @@ export function replacement(set:DJSet,index:number,library:Track[]):DJSet {
 }
 export type Command={type:'replace';index:number}|{type:'chill'}|{type:'end'}|{type:'boost';minute:number}|{type:'genre';genre:string}|{type:'unknown'};
 export function interpret(text:string):Command {
- const d=text.toLowerCase();const r=d.match(/(?:replace|remplace\w*)\s*(?:(?:le|la)\s*)?(?:(?:track|titre|morceau)\s*)?(?:number|numéro|n°|#)?\s*(\d+)/);if(r)return {type:'replace',index:Number(r[1])-1};
- const b=d.match(/(?:after|après)\s*(\d+)\s*(?:minutes?|min)/);if(b&&/energy|énergie|energ/.test(d))return {type:'boost',minute:Number(b[1])};
- if(/chill|calme/.test(d)&&/begin|start|début/.test(d))return {type:'chill'};
- if(/ending|end|fin/.test(d)&&/power|puissan|énerg|energ/.test(d))return {type:'end'};
- if(/more afro|plus d.afro/.test(d))return {type:'genre',genre:'Afro House'};return {type:'unknown'};
+ const d=text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’‘]/g,"'").replace(/\s+/g,' ').trim();
+ if(/\b(?:don't|do not|ne .{0,40}pas)\b/.test(d))return {type:'unknown'};
+ const r=d.match(/\b(?:replace|remplace\w*|change\w*)\s*(?:(?:le|la)\s*)?(?:(?:track|titre|morceau)\s*)?(?:number|numero|n°|#)?\s*(\d+)\b/);
+ if(r){const position=Number(r[1]);return position>0?{type:'replace',index:position-1}:{type:'unknown'};}
+ const b=d.match(/\b(?:after|apres|a partir de)\s*(\d+)\s*(?:minutes?|min(?:ute)?s?)(?:\b|$)/);
+ if(b&&/energy|energie/.test(d))return {type:'boost',minute:Number(b[1])};
+ if(/\b(?:chill|calme|doux|douce|relax|tranquille)\b/.test(d)&&/\b(?:beginning|begin|start|debut|depart|intro)\b/.test(d))return {type:'chill'};
+ if(/\b(?:ending|end|fin|final|finale)\b/.test(d)&&/power|puissan|energie|energique|intense/.test(d))return {type:'end'};
+ if(/\bmore afro|\bplus (?:d[' ]|de |davan\w* )?afro|\bdavantage d[' ]afro/.test(d))return {type:'genre',genre:'Afro House'};
+ return {type:'unknown'};
 }
