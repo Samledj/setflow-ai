@@ -58,11 +58,11 @@ Le navigateur lit seulement le fichier XML sélectionné. Aucun accès en écrit
 
 En **mode invité**, IndexedDB conserve la bibliothèque et les sets dans le navigateur, pour une adresse donnée. Un nouveau domaine de tunnel est un espace distinct : les données invitées n’y apparaissent pas automatiquement.
 
-Avec un **compte SETFLOW**, les métadonnées et les sets sont sauvegardés sur le serveur. Cliquez sur « Créer mon compte », choisissez un identifiant et un mot de passe (12 à 128 caractères), puis cochez « Se souvenir de moi » pour une session de 30 jours. À la création, une option permet de rattacher les données déjà présentes dans ce navigateur. Si le lien change, reconnectez-vous : vous récupérerez la bibliothèque du compte, sans réimporter le XML. Les fichiers audio et le XML original ne sont jamais envoyés : seules les métadonnées parsées, dont les chemins de fichiers, sont enregistrées.
+Avec un **compte SETFLOW**, les métadonnées et les sets sont sauvegardés sur le serveur. Cliquez sur « Créer mon compte », saisissez une adresse e-mail et choisissez un mot de passe (12 à 128 caractères), puis cochez « Se souvenir de moi » pour une session de 30 jours. À la création, une option permet de rattacher les données déjà présentes dans ce navigateur. Si le lien change, reconnectez-vous : vous récupérerez la bibliothèque du compte, sans réimporter le XML. Les fichiers audio et le XML original ne sont jamais envoyés : seules les métadonnées parsées, dont les chemins de fichiers, sont enregistrées.
 
 Les données privées sont dans `data/setflow.sqlite` (avec les éventuels fichiers `-wal` et `-shm`). Le dossier `data/` est exclu de Git. Sauvegardez ce dossier en arrêtant les serveurs avant copie ; ne le publiez jamais sur GitHub. Vous pouvez configurer un autre disque persistant avec `SETFLOW_DATA_DIR`. Les mots de passe sont hachés avec scrypt, les jetons de session sont aléatoires et stockés sous forme hachée ; le cookie est HttpOnly, SameSite=Lax et Secure sous HTTPS. Les écritures exigent la même origine et les tentatives de connexion sont limitées.
 
-Les comptes dépendent du serveur de ce Mac. Un autre clone GitHub possède sa propre base ; un hébergement sans disque persistant perdrait ces données. La récupération de mot de passe par e-mail n’est pas fournie dans cette version. Aucune API d’authentification payante ou télémétrie applicative n’est utilisée.
+Les comptes dépendent du serveur de ce Mac. Un autre clone GitHub possède sa propre base ; un hébergement sans disque persistant perdrait ces données. La connexion utilise l’adresse e-mail et le mot de passe SETFLOW, distinct du mot de passe de votre messagerie. L’adresse n’est pas vérifiée et aucun e-mail de validation ou de récupération n’est envoyé dans cette version. Les anciens identifiants restent acceptés à la connexion ; depuis « Mon compte », vous pouvez associer une adresse e-mail en confirmant votre mot de passe actuel. Cette association conserve le même compte, les mêmes morceaux et les mêmes sets. Aucune API d’authentification payante ou télémétrie applicative n’est utilisée.
 
 ## Architecture et extensions
 
@@ -80,3 +80,7 @@ npm run build
 ```
 
 Pour tester un XML réel, définissez `SETFLOW_TEST_XML` avec son chemin avant `npm test`. Sans cette variable, ce test est ignoré ; les autres tests utilisent des données fictives.
+
+## Connexion Google et Apple
+
+Ces fournisseurs ne sont pas activés : aucun bouton factice n’est affiché. Google nécessite un client OAuth configuré dans Google Cloud avec une adresse de retour autorisée. Apple nécessite une configuration Sign in with Apple, notamment un App ID principal, un Services ID et une clé privée. Une adresse HTTPS stable évite de reconfigurer les retours à chaque changement de tunnel. Ne publiez jamais les secrets de ces fournisseurs dans le dépôt. Une future intégration devra vérifier les jetons du fournisseur et ne devra pas fusionner automatiquement un compte sur la seule base d’une adresse e-mail locale non vérifiée.
