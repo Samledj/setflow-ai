@@ -27,3 +27,8 @@ out
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
+
+# Applications Mac et fichiers de packaging locaux
+/desktop-build/
+/release/
+/desktop/icon.iconset/

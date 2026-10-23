@@ -2,6 +2,10 @@
 
 Application DJ locale, sans abonnement et sans clé API. Next.js, TypeScript, Tailwind CSS, composants shadcn/ui (Button avec Radix et CVA), Lucide, Zustand, Recharts, IndexedDB et SQLite pour les comptes.
 
+## Applications Mac et téléphone
+
+Une application Mac autonome et une version web installable pour iPhone/Android sont disponibles. Consultez [le guide des applications](INSTALLER-APPLICATIONS.md) pour l’installation, le stockage des comptes et les limites des tunnels temporaires.
+
 ## Installer le projet depuis GitHub
 
 Prérequis : **Node.js 22.16 minimum** et npm. Aucun compte payant ni clé API n’est nécessaire.

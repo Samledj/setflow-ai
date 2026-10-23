@@ -1,0 +1,11 @@
+import { existsSync } from 'node:fs';
+import { resolve,join } from 'node:path';
+import { homedir } from 'node:os';
+import { pathToFileURL } from 'node:url';
+const root=process.cwd();const args=process.argv.slice(2);const i=args.lastIndexOf('--port');const port=Number(i>=0?args[i+1]:process.env.PORT||3002);
+if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Port invalide (1024 à 65535).');
+const server=join(root,'.next','standalone','server.js');if(!existsSync(server))throw new Error('Lancez npm run build avant npm start.');
+const shared=join(homedir(),'Library','Application Support','SETFLOW AI','data');
+process.env.PORT=String(port);process.env.HOSTNAME='127.0.0.1';process.env.NODE_ENV='production';process.env.NEXT_TELEMETRY_DISABLED='1';
+process.env.SETFLOW_DATA_DIR=resolve(process.env.SETFLOW_DATA_DIR||(process.platform==='darwin'&&existsSync(join(shared,'setflow.sqlite'))?shared:join(root,'data')));
+await import(pathToFileURL(server).href);

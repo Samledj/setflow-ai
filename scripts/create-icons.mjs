@@ -1,0 +1,7 @@
+import sharp from 'sharp';
+import { mkdir,writeFile } from 'node:fs/promises';
+const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9d9b0"/><stop offset="1" stop-color="#a48b55"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#24221d"/><stop offset="1" stop-color="#0b0b0c"/></linearGradient></defs><rect width="1024" height="1024" rx="218" fill="url(#b)"/><rect x="28" y="28" width="968" height="968" rx="196" fill="none" stroke="#c9b583" stroke-opacity=".32" stroke-width="3"/><g stroke="url(#g)" stroke-width="55" stroke-linecap="round"><path d="M270 465v110M391 343v354M512 265v510M633 375v290M754 440v150"/></g><circle cx="766" cy="263" r="18" fill="#e5d5a8"/></svg>`;
+await mkdir('public/icons',{recursive:true});await mkdir('desktop/icon.iconset',{recursive:true});await writeFile('public/icons/icon.svg',svg);
+for(const [file,size]of [['icon-192.png',192],['icon-512.png',512],['icon-maskable.png',512],['apple-touch-icon.png',180]])await sharp(Buffer.from(svg)).resize(size,size).png().toFile('public/icons/'+file);
+for(const size of [16,32,128,256,512])for(const scale of [1,2])await sharp(Buffer.from(svg)).resize(size*scale,size*scale).png().toFile(`desktop/icon.iconset/icon_${size}x${size}${scale===2?'@2x':''}.png`);
+console.log('Icônes SETFLOW générées.');

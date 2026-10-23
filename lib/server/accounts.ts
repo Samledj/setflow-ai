@@ -1,5 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
-import { mkdirSync, chmodSync } from 'node:fs';
+import { mkdirSync, chmodSync,existsSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { randomBytes, randomUUID, createHash, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
@@ -9,7 +10,9 @@ type UserRow=Account&{salt:string;password_hash:string};
 export class AccountError extends Error{constructor(message:string,public status=400){super(message);}}
 const databases=globalThis as typeof globalThis&{setflowAccounts?:Map<string,DatabaseSync>};
 export function database(){
- const folder=resolve(process.env.SETFLOW_DATA_DIR||join(process.cwd(),'data'));databases.setflowAccounts??=new Map();const existing=databases.setflowAccounts.get(folder);if(existing)return existing;
+ const desktopFolder=join(homedir(),'Library','Application Support','SETFLOW AI','data');
+ const sharedDesktop=process.platform==='darwin'&&existsSync(join(desktopFolder,'setflow.sqlite'))?desktopFolder:null;
+ const folder=resolve(process.env.SETFLOW_DATA_DIR||sharedDesktop||join(process.cwd(),'data'));databases.setflowAccounts??=new Map();const existing=databases.setflowAccounts.get(folder);if(existing)return existing;
  mkdirSync(folder,{recursive:true,mode:0o700});const path=join(folder,'setflow.sqlite');const d=new DatabaseSync(path);chmodSync(path,0o600);
  d.exec(`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; PRAGMA foreign_keys=ON;
  CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, username TEXT NOT NULL UNIQUE, salt TEXT NOT NULL, password_hash TEXT NOT NULL, created_at INTEGER NOT NULL);

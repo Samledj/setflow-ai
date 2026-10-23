@@ -4,9 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1 --port 3002",
-    "build": "next build --webpack",
-    "start": "next start --hostname 127.0.0.1 --port 3002",
-    "test": "tsx --test tests/*.test.ts"
+    "build": "next build --webpack && node scripts/prepare-standalone.mjs",
+    "start": "node scripts/start-server.mjs",
+    "test": "tsx --test tests/*.test.ts",
+    "icons": "node scripts/create-icons.mjs",
+    "desktop:prepare": "node scripts/prepare-standalone.mjs",
+    "desktop:dev": "electron desktop/main.cjs",
+    "desktop:package": "npm run build && node scripts/package-desktop.mjs",
+    "desktop:install": "node scripts/install-desktop.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -22,13 +27,18 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@electron/packager": "^20.3.0",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@xmldom/xmldom": "^0.8.11",
+    "electron": "^45.0.0",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=22.16.0"
   }
 }
